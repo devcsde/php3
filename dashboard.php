@@ -139,7 +139,7 @@
                 if(strlen($category) > 8){$category = substr($category, 0, 8);}
                 echo $category; ?>
               </td>
-              <td><img src="upload/<?php echo $image; ?>" width="160" height="50" /></td>
+              <td><img src="upload/<?php echo $image; ?>" width="150" height="50" /></td>
               <td>Processing</td>
               <td>
                 <a class="btn btn-warning" href="editPost.php?edit=<?php echo $id; ?>">Edit</a>

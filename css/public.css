@@ -46,6 +46,12 @@
     margin-top: -2px;
 }
 
+.fieldInfo {
+    color: orange;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1.2em;
+}
+
 .myNav {
     color: #27aae1;
 }

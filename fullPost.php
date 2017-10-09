@@ -1,13 +1,44 @@
 <?php require_once("include/db.php"); ?>
 <?php require_once("include/sessions.php"); ?>
 <?php require_once("include/helpers.php"); ?>
+<?php
+if(isset($_POST["Submit"])){
+    $name = mysqli_real_escape_string($connection, $_POST["Name"]);
+    $email = mysqli_real_escape_string($connection, $_POST["Email"]);
+    $comment = mysqli_real_escape_string($connection, $_POST["Comment"]);
+    date_default_timezone_set("Europe/Berlin");
+    $currentTime = time();
+    $datetime = strftime("%d.%m.%y, %H:%M:%S", $currentTime);
+    $datetime;
+    $postId = $_GET["id"];
+    
+    if(empty($name) || empty($email) || empty($comment)){
+        $_SESSION["ErrorMessage"] = "Bitte füllen Sie alle Felder aus.";
+    } elseif (strlen($comment) > 500) {
+        $_SESSION["ErrorMessage"] = "Nur 500 Zeichen per Kommentar.";
+    } else {
+        global $connection;
+        $query = "INSERT into comments (datetime, name, email, comment, status)
+            VALUES ('$datetime', '$name', '$email', '$comment', 'OFF')";
+        $execute = mysqli_query($connection, $query);
+       
+        if($execute){
+            $_SESSION["SuccessMessage"] = "Kommentar hinzugefügt und wird in Kürze freigeschaltet.";
+            redirect_to("fullPost.php?id={$postId}");
+        } else {
+            $_SESSION["ErrorMessage"] = "Kommentar konnte nicht hinzugefügt werden.";
+            redirect_to("fullPost.php?id={$postId}");
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>devcs // Artikel</title>
+    <title>Artikel</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/public.css">
     <script src="./js/jquery.min.js"></script>
@@ -59,6 +90,12 @@
     </div>
     <div class="row">
         <div class="col-sm-8">
+            <div>
+            <?php
+            echo message();
+            echo okMessage();
+            ?>
+            </div>
             <?php
             global $connection;
 
@@ -90,6 +127,26 @@
                 </div>
             </div>
     <?php   } ?>
+            <div>
+            <p>Kommentare:</p>
+            <form action="fullPost.php?id=<?php echo $postId; ?>" method="post" enctype="multipart/form-data">
+                <fieldset>
+                <div class="form-group">
+                        <label for="name"><span class="fieldInfo">Name:</span></label>
+                        <input class="form-control" type="text" name="Name" id="name" placeholder="Name">
+                    </div>
+                <div class="form-group">
+                        <label for="email"><span class="fieldInfo">Email:</span></label>
+                        <input class="form-control" type="email" name="Email" id="email" placeholder="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="commentArea"><span class="fieldInfo">Kommentar:</span></label>
+                        <textarea class="form-control" name="Comment" id="commentArea"></textarea>
+                    </div>
+                    <input class="btn btn-primary" type="Submit" name="Submit" value="Kommentar hinzufügen">
+                </fieldset>
+            </form>
+            </div>
         </div>
         <div class="col-sm-offset-1 col-sm-3">
             <h2>Test</h2>
