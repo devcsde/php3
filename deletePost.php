@@ -5,39 +5,19 @@
 <?php
 
 if(isset($_POST["Submit"])){
-    $title = mysqli_real_escape_string($connection, $_POST["Title"]);
-    $category = mysqli_real_escape_string($connection, $_POST["Category"]);
-    $post = mysqli_real_escape_string($connection, $_POST["Post"]);
-    date_default_timezone_set("Europe/Berlin");
-    $currentTime = time();
-    $datetime = strftime("%d.%m.%y, %H:%M:%S", $currentTime);
-    $datetime;
-    $admin = "Christian Scheidler";
-    $image = $_FILES["Image"]["name"];
-    $uploadPath = "upload/".basename($_FILES["Image"]["name"]);
+  global $connection;
+  $deleteId = $_GET["delete"];
+  $query = "DELETE FROM admin_panel WHERE id='$deleteId'";
+  $execute = mysqli_query($connection, $query);
 
-    if(empty($title)){
-        $_SESSION["ErrorMessage"] = "Bitte geben Sie einen Titel an.";
-        redirect_to("addNewPost.php");
-    } elseif (strlen($title) < 3) {
-        $_SESSION["ErrorMessage"] = "Der Titel benötigt mindestens 3 Zeichen.";
-        redirect_to("addNewPost.php");
-    } else {
-        global $connection;
-        $query = "INSERT INTO admin_panel (datetime, title, category, author, image, post)
-            VALUES ('$datetime', '$title', '$category', '$admin', '$image', '$post')";
-        $execute = mysqli_query($connection, $query);
-        move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
-        if($execute){
-            $_SESSION["SuccessMessage"] = "Artikel hinzugefügt.";
-            redirect_to("dashboard.php");
-        } else {
-            $_SESSION["ErrorMessage"] = "Artikel konnte nicht hinzugefügt werden.";
-            redirect_to("addNewPost.php");
-        }
-    }
+  if($execute){
+    $_SESSION["SuccessMessage"] = "Artikel wurde gelöscht.";
+    redirect_to("dashboard.php");
+  } else {
+    $_SESSION["ErrorMessage"] = "Artikel konnte nicht gelöscht werden.";
+    redirect_to("deletePost.php");
+  }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +26,7 @@ if(isset($_POST["Submit"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Artikel verfassen</title>
+    <title>Artikel löschen</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/dashboardStyle.css">
     <script src="js/jquery.min.js"></script>
@@ -121,48 +101,46 @@ if(isset($_POST["Submit"])){
         </ul>
     </div> <!-- Sidebar End  -->
     <div class="col-sm-10">
-        <h1>Artikel hinzufügen</h1>
+	      <div>
+	          <?php
+	          echo message();
+	          echo okMessage();
+	          ?>
+	      </div>
+        <h1>Artikel löschen</h1>
         <div>
-            <?php
-            echo message();
-            echo okMessage();
-            ?>
-        </div>
-        <div>
-            <form action="addNewPost.php" method="post" enctype="multipart/form-data">
+						<?php
+						$queryId = $_GET["delete"];
+						$connection;
+						$query = "SELECT * FROM admin_panel WHERE id='$queryId'";
+						$execute = mysqli_query($connection, $query);
+						while($dataRows = mysqli_fetch_array($execute)){
+							$title = $dataRows["title"];
+	            $category = $dataRows["category"];
+	            $image = $dataRows["image"];
+	            $post = $dataRows["post"];
+						}
+						?>
+            <form action="deletePost.php?delete=<?php echo $queryId; ?>" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <div class="form-group">
                         <label for="title"><span class="fieldInfo">Titel:</span></label>
-                        <input class="form-control" type="text" name="Title" id="title" placeholder="Titel">
+                        <input value="<?php echo $title; ?>" class="form-control" type="text" name="Title" id="title" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="categorySelect"><span class="fieldInfo">Kategorie:</span></label>
-                        <select class="form-control" id="categorySelect" name="Category">
-                            <?php
-                            global $connection;
-                            $viewquery = "SELECT * FROM category ORDER BY datetime desc";
-                            $execute = mysqli_query($connection, $viewquery);
-
-                            while($dataRows = mysqli_fetch_array($execute)){
-                                $id = $dataRows["id"];
-                                $name = $dataRows["name"];
-                            ?>
-                                <option><?php echo $name ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
+                        <label for="categorySelect"><span class="fieldInfo">Kategorie:</span></label><br />
+                        <input value="<?php echo $category; ?>" class="form-control" type="text" name="Category" id="categorySelect" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="imageSelect"><span class="fieldInfo">Bild:</span></label>
-                        <input type="File" class="form-control" name="Image" id="imageSelect">
+                        <label for="imageSelect"><span class="fieldInfo">Bild:</span></label><br />
+												<img src="upload/<?php echo $image; ?>" width="170" height="70"/>
                     </div>
                     <div class="form-group">
                         <label for="postArea"><span class="fieldInfo">Artikel:</span></label>
-                        <textarea class="form-control" name="Post" id="postArea" rows="6" cols="50"></textarea>
+                        <textarea class="form-control" name="Post" id="postArea" rows="6" cols="50" disabled><?php echo $post; ?></textarea>
                     </div>
                     <br>
-                    <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Artikel hinzufügen">
+                    <input class="btn btn-danger btn-block" type="Submit" name="Submit" value="Artikel löschen">
                     <br>
                 </fieldset>
             </form>

@@ -23,27 +23,27 @@ if(isset($_POST["Submit"])){
         $_SESSION["ErrorMessage"] = "Der Titel benötigt mindestens 3 Zeichen.";
         redirect_to("editPost.php");
     } else {
-        global $connection;
+				global $connection;
 				$editId = $_GET["edit"];
 				if(empty($image)){
 					$query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
-						category='$category', author='$admin', post='$post'
-						WHERE id='$editId'";
+					category='$category', author='$admin', post='$post'
+					WHERE id='$editId'";
 				} else {
-        $query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
+					$query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
 					category='$category', author='$admin', image='$image', post='$post'
 					WHERE id='$editId'";
 				}
-        $execute = mysqli_query($connection, $query);
-        move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
-        if($execute){
-            $_SESSION["SuccessMessage"] = "Artikel wurde editiert.";
-            redirect_to("dashboard.php");
-        } else {
-            $_SESSION["ErrorMessage"] = "Artikel konnte nicht editiert werden.";
-            redirect_to("editPost.php");
-        }
-    }
+				$execute = mysqli_query($connection, $query);
+				move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
+				if($execute){
+					$_SESSION["SuccessMessage"] = "Artikel wurde editiert.";
+					redirect_to("dashboard.php");
+				} else {
+					$_SESSION["ErrorMessage"] = "Artikel konnte nicht editiert werden.";
+					redirect_to("editPost.php");
+				}
+		}
 }
 
 ?>
@@ -54,16 +54,11 @@ if(isset($_POST["Submit"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>devcs // Editieren</title>
+    <title>Artikel editieren</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/dashboardStyle.css">
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-		<script>
-			$('select').click(function () {
-				$('option[selected="selected"]', this).remove();
-			});
-		</script>
 </head>
 <body>
   <div class="cont1"></div>
