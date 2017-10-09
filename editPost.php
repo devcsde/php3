@@ -18,22 +18,39 @@ if(isset($_POST["Submit"])){
 
     if(empty($title)){
         $_SESSION["ErrorMessage"] = "Bitte geben Sie einen Titel an.";
-        redirect_to("addNewPost.php");
+        redirect_to("editPost.php");
     } elseif (strlen($title) < 3) {
         $_SESSION["ErrorMessage"] = "Der Titel benötigt mindestens 3 Zeichen.";
-        redirect_to("addNewPost.php");
+        redirect_to("editPost.php");
+    } elseif (empty($image)) {
+			global $connection;
+			$editId = $_GET["edit"];
+			$query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
+				category='$category', author='$admin', post='$post'
+				WHERE id='$editId'";
+			$execute = mysqli_query($connection, $query);
+			move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
+			if($execute){
+					$_SESSION["SuccessMessage"] = "Artikel wurde editiert.";
+					redirect_to("dashboard.php");
+			} else {
+					$_SESSION["ErrorMessage"] = "Artikel konnte nicht editiert werden.";
+					redirect_to("editPost.php");
+			}
     } else {
         global $connection;
-        $query = "INSERT INTO admin_panel (datetime, title, category, author, image, post)
-            VALUES ('$datetime', '$title', '$category', '$admin', '$image', '$post')";
+				$editId = $_GET["edit"];
+        $query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
+					category='$category', author='$admin', image='$image', post='$post'
+					WHERE id='$editId'";
         $execute = mysqli_query($connection, $query);
         move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
         if($execute){
-            $_SESSION["SuccessMessage"] = "Artikel hinzugefügt.";
-            redirect_to("addNewPost.php");
+            $_SESSION["SuccessMessage"] = "Artikel wurde editiert.";
+            redirect_to("dashboard.php");
         } else {
-            $_SESSION["ErrorMessage"] = "Artikel konnte nicht hinzugefügt werden.";
-            redirect_to("addNewPost.php");
+            $_SESSION["ErrorMessage"] = "Artikel konnte nicht editiert werden.";
+            redirect_to("editPost.php");
         }
     }
 }
@@ -51,6 +68,11 @@ if(isset($_POST["Submit"])){
     <link rel="stylesheet" href="./css/dashboardStyle.css">
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+		<script>
+			$('select').click(function () {
+				$('option[selected="selected"]', this).remove();
+			});
+		</script>
 </head>
 <body>
   <div class="cont1"></div>
@@ -129,11 +151,23 @@ if(isset($_POST["Submit"])){
 	      </div>
         <h1>Artikel editieren</h1>
         <div>
-            <form action="addNewPost.php" method="post" enctype="multipart/form-data">
+						<?php
+						$queryId = $_GET["edit"];
+						$connection;
+						$query = "SELECT * FROM admin_panel WHERE id='$queryId'";
+						$execute = mysqli_query($connection, $query);
+						while($dataRows = mysqli_fetch_array($execute)){
+							$title = $dataRows["title"];
+	            $category = $dataRows["category"];
+	            $image = $dataRows["image"];
+	            $post = $dataRows["post"];
+						}
+						?>
+            <form action="editPost.php?edit=<?php echo $queryId; ?>" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <div class="form-group">
                         <label for="title"><span class="fieldInfo">Titel:</span></label>
-                        <input class="form-control" type="text" name="Title" id="title" placeholder="Titel">
+                        <input value="<?php echo $title; ?>" class="form-control" type="text" name="Title" id="title" placeholder="Titel">
                     </div>
                     <div class="form-group">
                         <label for="categorySelect"><span class="fieldInfo">Kategorie:</span></label>
@@ -147,22 +181,28 @@ if(isset($_POST["Submit"])){
                                 $id = $dataRows["id"];
                                 $name = $dataRows["name"];
                             ?>
+																<?php
+																	if($name == $category){
+																?>
+																	<option selected="selected"><?php echo $name; ?></option>
+														<?php } else { ?>
                                 <option><?php echo $name ?></option>
                             <?php
-                            }
+													  }}
                             ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="imageSelect"><span class="fieldInfo">Bild:</span></label>
-                        <input type="File" class="form-control" name="Image" id="imageSelect">
+                        <label for="imageSelect"><span class="fieldInfo">Bild:</span></label><br />
+												<img src="upload/<?php echo $image; ?>" width="170" height="70"/>
+                        <input type="File" class="form-control" name="Image" id="imageSelect" value="<?php echo $image; ?>" >
                     </div>
                     <div class="form-group">
                         <label for="postArea"><span class="fieldInfo">Artikel:</span></label>
-                        <textarea class="form-control" name="Post" id="postArea"></textarea>
+                        <textarea class="form-control" name="Post" id="postArea" rows="6" cols="50"><?php echo $post; ?></textarea>
                     </div>
                     <br>
-                    <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Artikel hinzufügen">
+                    <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Artikel editieren">
                     <br>
                 </fieldset>
             </form>

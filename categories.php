@@ -46,13 +46,6 @@ if(isset($_POST["Submit"])){
     <link rel="stylesheet" href="./css/dashboardStyle.css">
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
-    <style>
-       .fieldInfo {
-        color: orange;
-        font-family: Georgia, 'Times New Roman', Times, serif;
-        font-size: 1.2em;
-        }
-    </style>
 </head>
 <body>
 

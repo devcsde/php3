@@ -51,13 +51,6 @@ if(isset($_POST["Submit"])){
     <link rel="stylesheet" href="./css/dashboardStyle.css">
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <style>
-       .fieldInfo {
-        color: orange;
-        font-family: Georgia, 'Times New Roman', Times, serif;
-        font-size: 1.2em;
-        }
-    </style>
 </head>
 <body>
   <div class="cont1"></div>
@@ -166,7 +159,7 @@ if(isset($_POST["Submit"])){
                     </div>
                     <div class="form-group">
                         <label for="postArea"><span class="fieldInfo">Artikel:</span></label>
-                        <textarea class="form-control" name="Post" id="postArea"></textarea>
+                        <textarea class="form-control" name="Post" id="postArea" rows="6" cols="50"></textarea>
                     </div>
                     <br>
                     <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Artikel hinzufügen">
