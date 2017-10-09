@@ -22,27 +22,18 @@ if(isset($_POST["Submit"])){
     } elseif (strlen($title) < 3) {
         $_SESSION["ErrorMessage"] = "Der Titel benötigt mindestens 3 Zeichen.";
         redirect_to("editPost.php");
-    } elseif (empty($image)) {
-			global $connection;
-			$editId = $_GET["edit"];
-			$query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
-				category='$category', author='$admin', post='$post'
-				WHERE id='$editId'";
-			$execute = mysqli_query($connection, $query);
-			move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
-			if($execute){
-					$_SESSION["SuccessMessage"] = "Artikel wurde editiert.";
-					redirect_to("dashboard.php");
-			} else {
-					$_SESSION["ErrorMessage"] = "Artikel konnte nicht editiert werden.";
-					redirect_to("editPost.php");
-			}
     } else {
         global $connection;
 				$editId = $_GET["edit"];
+				if(empty($image)){
+					$query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
+						category='$category', author='$admin', post='$post'
+						WHERE id='$editId'";
+				} else {
         $query = "UPDATE admin_panel SET datetime='$datetime', title='$title',
 					category='$category', author='$admin', image='$image', post='$post'
 					WHERE id='$editId'";
+				}
         $execute = mysqli_query($connection, $query);
         move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
         if($execute){
