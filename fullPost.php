@@ -18,8 +18,8 @@ if(isset($_POST["Submit"])){
         $_SESSION["ErrorMessage"] = "Nur 500 Zeichen per Kommentar.";
     } else {
         global $connection;
-        $query = "INSERT into comments (datetime, name, email, comment, status)
-            VALUES ('$datetime', '$name', '$email', '$comment', 'OFF')";
+        $query = "INSERT into comments (datetime, name, email, comment, status, admin_panel_id)
+            VALUES ('$datetime', '$name', '$email', '$comment', 'OFF', '$postId')";
         $execute = mysqli_query($connection, $query);
        
         if($execute){
@@ -46,7 +46,6 @@ if(isset($_POST["Submit"])){
     <script src="./js/main.js"></script>
 </head>
 <body>
-
 <div class="cont1"></div>
 <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0px;">
     <div class="container">
@@ -61,7 +60,7 @@ if(isset($_POST["Submit"])){
         </div>
         <div class="collapse navbar-collapse" id="collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
+                <li><a href="index.php">Home</a></li>
                 <li class="active"><a href="blog.php">Blog</a></li>
                 <li><a href="#">Über mich</a></li>
                 <li><a href="#">Services</a></li>
@@ -81,11 +80,11 @@ if(isset($_POST["Submit"])){
 
 <div class="container">
     <div class="blog-header">
-        <h3><span class="mySpan">dev</span>elopment <span class="mySpan">c</span>oncept <span class="mySpan">s</span>tyle</h3>
+        &nbsp;
         <p class="lead"><span
                         class="txt-rotate"
                         data-period="2000"
-                        data-rotate='[ "javascript ++ PHP ++ web development", "nodejs ++ html 5 ++ jquery ++ scss" ]'></span>
+                        data-rotate='[ "web development ++ php ++ javascript ++ nodejs ++ jquery ++ html5 ++ css" ]'></span>
         </p>
     </div>
     <div class="row">
@@ -126,21 +125,45 @@ if(isset($_POST["Submit"])){
                     <p class="post"><?php echo htmlentities($post); ?> </p>
                 </div>
             </div>
-    <?php   } ?>
-            <div>
-            <p>Kommentare:</p>
-            <form action="fullPost.php?id=<?php echo $postId; ?>" method="post" enctype="multipart/form-data">
+            <?php 
+            } 
+            ?>
+            <h4 class="mySpan2"><strong>Kommentare:</strong></h4>
+            <div class="container col-sm-12">
+            <?php  
+            $connection;
+            $commentQuery = "SELECT * FROM comments WHERE admin_panel_id='$postId' AND status='ON' ORDER BY datetime desc";
+            $execute = mysqli_query($connection, $commentQuery);
+            while($dataRows = mysqli_fetch_array($execute)){
+                $commentDate = $dataRows["datetime"];
+                $commentName = $dataRows["name"];
+                $comment = $dataRows["comment"];
+            ?>
+            <div class="row commentBlock thumbnail">
+                <div class="col-sm-9">
+                    <p><?php echo $comment; ?></p>
+                </div>
+                <div class="col-sm-3">
+                    <p class="comments"><?php echo $commentName; ?></p>
+                    <p class="description"><?php echo $commentDate; ?></p>
+                </div>
+            </div>
+            <hr>
+            <?php
+            }
+            ?>
+            <form class="commentForm" action="fullPost.php?id=<?php echo $postId; ?>" method="post" enctype="multipart/form-data">
                 <fieldset>
                 <div class="form-group">
-                        <label for="name"><span class="fieldInfo">Name:</span></label>
-                        <input class="form-control" type="text" name="Name" id="name" placeholder="Name">
+                        <label for="name"><span class="mySpan2">Name:</span></label>
+                        <input class="form-control" type="text" name="Name" id="name">
                     </div>
                 <div class="form-group">
-                        <label for="email"><span class="fieldInfo">Email:</span></label>
-                        <input class="form-control" type="email" name="Email" id="email" placeholder="email">
+                        <label for="email"><span class="mySpan2">Email:</span></label>
+                        <input class="form-control" type="email" name="Email" id="email">
                     </div>
                     <div class="form-group">
-                        <label for="commentArea"><span class="fieldInfo">Kommentar:</span></label>
+                        <label for="commentArea"><span class="mySpan2">Kommentar:</span></label>
                         <textarea class="form-control" name="Comment" id="commentArea"></textarea>
                     </div>
                     <input class="btn btn-primary" type="Submit" name="Submit" value="Kommentar hinzufügen">
@@ -149,7 +172,9 @@ if(isset($_POST["Submit"])){
             </div>
         </div>
         <div class="col-sm-offset-1 col-sm-3">
-            <h2>Test</h2>
+            <h3><span class="mySpan">dev</span>elopment<br>
+            <span class="mySpan2">c</span>oncept<br> 
+            <span class="mySpan2">s</span>tyle</h3>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate excepturi earum aspernatur corporis eaque soluta dolores minus ut, veritatis magnam velit nam nihil nisi placeat quaerat eos quas debitis vitae eum corrupti ad. Nobis nisi optio possimus fugiat autem esse animi magni similique, dolore illo voluptate error at culpa non!</p>
         </div>
     </div>

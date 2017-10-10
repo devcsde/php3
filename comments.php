@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Bereich</title>
+    <title>Kommentare</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="css/dashboardStyle.css">
     <script src="js/jquery.min.js"></script>
@@ -51,7 +51,7 @@
     <div class="col-sm-2">
         &nbsp;
         <ul id="sidemenu" class="nav nav-pills nav-stacked">
-            <li class="active"><a href="dashboard.php">
+            <li><a href="dashboard.php">
                 <span class="glyphicon glyphicon-th"></span>
                 &nbsp;Dashboard</a>
             </li>
@@ -67,7 +67,7 @@
             <span class="glyphicon glyphicon-user"></span>
                 &nbsp;Manage Admins</a>
             </li>
-            <li><a href="comments.php">
+            <li class="active"><a href="comments.php">
             <span class="glyphicon glyphicon-comment"></span>
                 &nbsp;Kommentare</a>
             </li>
@@ -88,72 +88,92 @@
               echo okMessage();
           ?>
       </div>
-      <h1>Admin Dashboard</h1>
+      <h1>Nicht freigeschaltete Kommentare</h1>
       <div class="table-responsive">
-        <table class="table table-stripped table-hover">
-          <tr>
-            <th>No.</th>
-            <th>Titel</th>
-            <th>Datum</th>
-            <th>Author</th>
-            <th>Kategorie</th>
-            <th>Bild</th>
-            <th>Kommentare</th>
-            <th>Aktion</th>
-            <th>Details</th>
-          </tr>
-    <?php
-        global $connection;
-        $viewquery = "SELECT * FROM admin_panel ORDER BY datetime desc";
-        $execute = mysqli_query($connection, $viewquery);
-
-        $SrNo = 0;
-
-        while($dataRows = mysqli_fetch_array($execute)){
-            $id = $dataRows["id"];
-            $datetime = $dataRows["datetime"];
-            $title = $dataRows["title"];
-            $category = $dataRows["category"];
-            $author = $dataRows["author"];
-            $image = $dataRows["image"];
-            $post = $dataRows["post"];
-            $SrNo++;
-        ?>
+        <table class="table table-striped table-hover">
             <tr>
-              <td> <?php echo $SrNo; ?> </td>
-              <td class="dashColor">  <?php
-                    if(strlen($title) > 20){$title = substr($title, 0, 20)."..";}
-                    echo $title;
-                    ?>
-              </td>
-              <td>
-                <?php
-                if(strlen($datetime) > 8){$datetime = substr($datetime, 0, 8);}
-                 echo $datetime; ?>
-              </td>
-              <td> <?php
-                if(strlen($author) > 9){$author = substr($author, 0, 9);}
-                echo $author; ?>
-              </td>
-              <td> <?php
-                if(strlen($category) > 8){$category = substr($category, 0, 8);}
-                echo $category; ?>
-              </td>
-              <td><img src="upload/<?php echo $image; ?>" width="150" height="50" /></td>
-              <td>Processing</td>
-              <td>
-                <a class="btn btn-warning" href="editPost.php?edit=<?php echo $id; ?>">Edit</a>
-                <a class="btn btn-danger" href="deletePost.php?delete=<?php echo $id; ?>">Delete</a>
-              </td>
-              <td><a target="_blank" class="btn btn-primary" href="fullPost.php?id=<?php echo $id; ?>">Vorschau</a></td>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Datum</th>
+                <th>Kommentare</th>
+                <th>Freischalten</th>
+                <th>Löschen</th>
+                <th>Vorschau</th>
             </tr>
-
-    <?php  }; ?>    <!-- end of while loop -->
-
-</table>
-
+<?php
+global $connection;
+$query = "SELECT * FROM comments WHERE status='OFF' ORDER BY datetime desc";
+$execute = mysqli_query($connection, $query);
+$srNo = 0;
+while($dataRows = mysqli_fetch_array($execute)){
+    $id = $dataRows["id"];
+    $datetime = $dataRows["datetime"];
+    $name = $dataRows["name"];
+    $comment = $dataRows["comment"];
+    $postId = $dataRows["admin_panel_id"];
+    $srNo++;
+    if(strlen($comment) > 40){$comment = substr($comment, 0, 40)."...";}
+    if(strlen($name) > 10){$name = substr($name, 0, 10)."...";}
+?>
+            <tr>
+                <td><?php echo htmlentities($srNo); ?></td>
+                <td class="dashColor"><?php echo htmlentities($name); ?></td>
+                <td><?php echo htmlentities($datetime); ?></td>
+                <td><?php echo htmlentities($comment); ?></td>
+                <td><a class="btn-sm btn-success" href="approve.php?id=<?php echo $id; ?>">Freischalten</a></td>
+                <td><a class="btn-sm btn-danger" href="deleteComment.php?id=<?php echo $id; ?>">Löschen</a></td>
+                <td><a class="btn-sm btn-primary" href="fullPost.php?id=<?php echo $postId; ?>" target=_blank>Vorschau</a></td>
+            </tr>
+<?php
+}
+?>
+        </table>
       </div>
 
+      <h1>Freigeschaltete Kommentare</h1>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Datum</th>
+                <th>Kommentare</th>
+                <th>Admin</th>
+                <th>Sperren</th>
+                <th>Löschen</th>
+                <th>Vorschau</th>
+            </tr>
+<?php
+global $connection;
+$admin = "Chris";
+$query = "SELECT * FROM comments WHERE status='ON' ORDER BY datetime desc";
+$execute = mysqli_query($connection, $query);
+$srNo = 0;
+while($dataRows = mysqli_fetch_array($execute)){
+    $id = $dataRows["id"];
+    $datetime = $dataRows["datetime"];
+    $name = $dataRows["name"];
+    $comment = $dataRows["comment"];
+    $postId = $dataRows["admin_panel_id"];
+    $srNo++;
+    if(strlen($comment) > 40){$comment = substr($comment, 0, 40)."...";}
+    if(strlen($name) > 10){$name = substr($name, 0, 10)."...";}
+?>
+            <tr>
+                <td><?php echo htmlentities($srNo); ?></td>
+                <td class="dashColor"><?php echo htmlentities($name); ?></td>
+                <td><?php echo htmlentities($datetime); ?></td>
+                <td><?php echo htmlentities($comment); ?></td>
+                <td><?php echo $admin; ?></td>
+                <td><a class="btn-sm btn-warning" href="deny.php?id=<?php echo $id; ?>">Sperren</a></td>
+                <td><a class="btn-sm btn-danger" href="deleteComment.php?id=<?php echo $id; ?>">Löschen</a></td>
+                <td><a class="btn-sm btn-primary" href="fullPost.php?id=<?php echo $postId; ?>" target=_blank>Vorschau</a></td>
+            </tr>
+<?php
+}
+?>
+        </table>
+      </div>
     </div> <!-- Main End  -->
 </div>
 </div>

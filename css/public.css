@@ -29,6 +29,22 @@
     float: right;
 }
 
+.commentBlock {
+    background: #F6F7F9;
+    padding-top: 10px;
+}
+
+.commentForm {
+    margin: 0 -15px 0 -15px;
+}
+
+.comments {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #005e90;
+}
+
 .cont1 {
     height: 10px;
     background: #27aae1;
@@ -43,11 +59,11 @@
 .description {
     color: #868686;
     font-weight: bold;
-    margin-top: -2px;
+    margin-top: -5px;
 }
 
 .fieldInfo {
-    color: orange;
+    color: #F08827;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 1.2em;
 }
@@ -64,7 +80,6 @@
 .myNav a {
     color: #27aae1;
     margin-top: 6.5px;
-    
 }
 
 .myNav h2 a:hover {
@@ -80,6 +95,10 @@
 
 .mySpan {
     color: #F08827;
+}
+
+.mySpan2 {
+    color: #005e90;
 }
 
 .post {

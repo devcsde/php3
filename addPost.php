@@ -18,10 +18,10 @@ if(isset($_POST["Submit"])){
 
     if(empty($title)){
         $_SESSION["ErrorMessage"] = "Bitte geben Sie einen Titel an.";
-        redirect_to("addNewPost.php");
+        redirect_to("addPost.php");
     } elseif (strlen($title) < 3) {
         $_SESSION["ErrorMessage"] = "Der Titel benötigt mindestens 3 Zeichen.";
-        redirect_to("addNewPost.php");
+        redirect_to("addPost.php");
     } else {
         global $connection;
         $query = "INSERT INTO admin_panel (datetime, title, category, author, image, post)
@@ -33,7 +33,7 @@ if(isset($_POST["Submit"])){
             redirect_to("dashboard.php");
         } else {
             $_SESSION["ErrorMessage"] = "Artikel konnte nicht hinzugefügt werden.";
-            redirect_to("addNewPost.php");
+            redirect_to("addPost.php");
         }
     }
 }
@@ -67,7 +67,7 @@ if(isset($_POST["Submit"])){
           </div>
           <div class="collapse navbar-collapse" id="collapse">
               <ul class="nav navbar-nav">
-                  <li><a href="/">Home</a></li>
+                  <li><a href="index.php">Home</a></li>
                   <li><a href="blog.php" target="_blank">Blog</a></li>
                   <li><a href="#">Über mich</a></li>
                   <li><a href="#">Services</a></li>
@@ -94,7 +94,7 @@ if(isset($_POST["Submit"])){
                 <span class="glyphicon glyphicon-th"></span>
                 &nbsp;Dashboard</a>
             </li>
-            <li  class="active"><a href="addNewPost.php">
+            <li  class="active"><a href="addPost.php">
                 <span class="glyphicon glyphicon-list-alt"></span>
                 &nbsp;Neuer Artikel</a>
             </li>
@@ -106,7 +106,7 @@ if(isset($_POST["Submit"])){
                 <span class="glyphicon glyphicon-user"></span>
                 &nbsp;Manage Admins</a>
             </li>
-            <li><a href="#">
+            <li><a href="comments.php">
                 <span class="glyphicon glyphicon-comment"></span>
                 &nbsp;Kommentare</a>
             </li>
@@ -129,7 +129,7 @@ if(isset($_POST["Submit"])){
             ?>
         </div>
         <div>
-            <form action="addNewPost.php" method="post" enctype="multipart/form-data">
+            <form action="addPost.php" method="post" enctype="multipart/form-data">
                 <fieldset>
                     <div class="form-group">
                         <label for="title"><span class="fieldInfo">Titel:</span></label>

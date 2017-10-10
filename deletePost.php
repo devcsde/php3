@@ -47,7 +47,7 @@ if(isset($_POST["Submit"])){
           </div>
           <div class="collapse navbar-collapse" id="collapse">
               <ul class="nav navbar-nav">
-                  <li><a href="/">Home</a></li>
+                  <li><a href="index.php">Home</a></li>
                   <li><a href="blog.php" target="_blank">Blog</a></li>
                   <li><a href="#">Über mich</a></li>
                   <li><a href="#">Services</a></li>
@@ -74,7 +74,7 @@ if(isset($_POST["Submit"])){
                     <span class="glyphicon glyphicon-th"></span>
                     &nbsp;Dashboard</a>
                 </li>
-                <li  class="active"><a href="addNewPost.php">
+                <li  class="active"><a href="addPost.php">
                     <span class="glyphicon glyphicon-list-alt"></span>
                     &nbsp;Neuer Artikel</a>
                 </li>
@@ -86,7 +86,7 @@ if(isset($_POST["Submit"])){
                     <span class="glyphicon glyphicon-user"></span>
                     &nbsp;Manage Admins</a>
                 </li>
-                <li><a href="#">
+                <li><a href="comments.php">
                     <span class="glyphicon glyphicon-comment"></span>
                     &nbsp;Kommentare</a>
                 </li>
