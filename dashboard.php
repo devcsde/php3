@@ -24,16 +24,15 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <h2><a href="blog.php"><span class="mySpan">dev</span>cs</a></h2>
+              <h2 class="logo"><a href="index.php"><span class="mySpan">dev</span>cs</a></h2>
           </div>
           <div class="collapse navbar-collapse" id="collapse">
               <ul class="nav navbar-nav">
-                  <li><a href="index.php">Home</a></li>
-                  <li><a href="blog.php" target="_blank">Blog</a></li>
-                  <li><a href="#">Über mich</a></li>
-                  <li><a href="#">Services</a></li>
-                  <li><a href="#">Kontakt</a></li>
-                  <li><a href="#">Feature</a></li>
+                <li><a href="index.php">Start</a></li>
+                <li><a href="services.php">Services</a></li>
+                <li><a href="features.php">Features</a></li>
+                <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="blog.php" target="_blank">Blog</a></li>
               </ul>
               <form action="blog.php" class="navbar-form navbar-right">
                   <div class="form-group">
@@ -63,19 +62,32 @@
                 <span class="glyphicon glyphicon-tags"></span>
                 &nbsp;Kategorien</a>
             </li>
-            <li><a href="#">
+            <li><a href="admins.php">
             <span class="glyphicon glyphicon-user"></span>
                 &nbsp;Manage Admins</a>
             </li>
             <li><a href="comments.php">
             <span class="glyphicon glyphicon-comment"></span>
-                &nbsp;Kommentare</a>
+                &nbsp;Kommentare
+                <?php
+                $connection;
+                $queryDeny = "SELECT COUNT(*) FROM comments WHERE status='OFF'";
+                $executeDeny = mysqli_query($connection, $queryDeny);
+                $rowsDeny = mysqli_fetch_array($executeDeny);
+                $totalDeny = array_shift($rowsDeny);
+                if($totalDeny > 0){
+                ?>
+                    <div class="label label-danger"><?php echo $totalDeny; ?></div>
+                <?php    
+                }
+                ?>
+                </a>
             </li>
-            <li><a href="#">
+            <li><a href="blog.php"  target=_blank>
             <span class="glyphicon glyphicon-equalizer"></span>
                 &nbsp;Live Blog</a>
             </li>
-            <li><a href="#">
+            <li><a href="logout.php">
             <span class="glyphicon glyphicon-log-out"></span>
                 &nbsp;Logout</a>
             </li>
@@ -88,7 +100,7 @@
               echo okMessage();
           ?>
       </div>
-      <h1>Admin Dashboard</h1>
+      <h2>Admin Dashboard</h2>
       <div class="table-responsive">
         <table class="table table-stripped table-hover">
           <tr>
@@ -99,11 +111,11 @@
             <th>Kategorie</th>
             <th>Bild</th>
             <th>Kommentare</th>
-            <th>Aktion</th>
             <th>Details</th>
+            <th></th>
           </tr>
     <?php
-        global $connection;
+        $connection;
         $viewquery = "SELECT * FROM admin_panel ORDER BY datetime desc";
         $execute = mysqli_query($connection, $viewquery);
 
@@ -125,27 +137,52 @@
                     if(strlen($title) > 20){$title = substr($title, 0, 20)."..";}
                     echo $title;
                     ?>
-              </td>
-              <td>
+                </td>
+                <td>
+                    <?php
+                    if(strlen($datetime) > 8){$datetime = substr($datetime, 0, 8);}
+                    echo $datetime; ?>
+                </td>
+                <td> <?php
+                    if(strlen($author) > 9){$author = substr($author, 0, 9);}
+                    echo $author; ?>
+                </td>
+                <td> <?php
+                    if(strlen($category) > 8){$category = substr($category, 0, 8);}
+                    echo $category; ?>
+                </td>
+                <td><img src="upload/<?php echo $image; ?>" width="150" height="50" /></td>
+                <td>
                 <?php
-                if(strlen($datetime) > 8){$datetime = substr($datetime, 0, 8);}
-                 echo $datetime; ?>
-              </td>
-              <td> <?php
-                if(strlen($author) > 9){$author = substr($author, 0, 9);}
-                echo $author; ?>
-              </td>
-              <td> <?php
-                if(strlen($category) > 8){$category = substr($category, 0, 8);}
-                echo $category; ?>
-              </td>
-              <td><img src="upload/<?php echo $image; ?>" width="150" height="50" /></td>
-              <td>Processing</td>
-              <td>
-                <a class="btn btn-warning" href="editPost.php?edit=<?php echo $id; ?>">Edit</a>
-                <a class="btn btn-danger" href="deletePost.php?delete=<?php echo $id; ?>">Delete</a>
-              </td>
-              <td><a target="_blank" class="btn btn-primary" href="fullPost.php?id=<?php echo $id; ?>">Vorschau</a></td>
+                $connection;
+                $queryAppr = "SELECT COUNT(*) FROM comments WHERE admin_panel_id='$id' AND status='ON'";
+                $executeAppr = mysqli_query($connection, $queryAppr);
+                $rowsAppr = mysqli_fetch_array($executeAppr);
+                $totalAppr = array_shift($rowsAppr);
+                if($totalAppr > 0){
+                ?>
+                    <div class="label label-success"><?php echo $totalAppr; ?></div>
+                <?php    
+                }
+                ?>
+                <?php
+                $connection;
+                $queryDeny = "SELECT COUNT(*) FROM comments WHERE admin_panel_id='$id' AND status='OFF'";
+                $executeDeny = mysqli_query($connection, $queryDeny);
+                $rowsDeny = mysqli_fetch_array($executeDeny);
+                $totalDeny = array_shift($rowsDeny);
+                if($totalDeny > 0){
+                ?>
+                    <div class="label label-danger"><?php echo $totalDeny; ?></div>
+                <?php    
+                }
+                ?>
+                </td>
+                <td><a target="_blank" class="btn-sm btn-primary" href="fullPost.php?id=<?php echo $id; ?>">Vorschau</a></td>
+                <td>
+                    <a class="btn-sm btn-warning" href="editPost.php?edit=<?php echo $id; ?>">Edit</a>
+                    <a class="btn-sm btn-danger" href="deletePost.php?delete=<?php echo $id; ?>">Delete</a>
+                </td>
             </tr>
 
     <?php  }; ?>    <!-- end of while loop -->

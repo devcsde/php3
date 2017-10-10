@@ -68,6 +68,10 @@
     font-size: 1.2em;
 }
 
+.logo {
+    padding-right:50px;
+}
+
 .myNav {
     color: #27aae1;
 }
@@ -106,5 +110,3 @@
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: justify;
 }
-
-

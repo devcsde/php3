@@ -24,16 +24,15 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <h2><a href="blog.php"><span class="mySpan">dev</span>cs</a></h2>
+              <h2 class="logo"><a href="index.php"><span class="mySpan">dev</span>cs</a></h2>
           </div>
           <div class="collapse navbar-collapse" id="collapse">
               <ul class="nav navbar-nav">
-                  <li><a href="index.php">Home</a></li>
-                  <li><a href="blog.php" target="_blank">Blog</a></li>
-                  <li><a href="#">Über mich</a></li>
-                  <li><a href="#">Services</a></li>
-                  <li><a href="#">Kontakt</a></li>
-                  <li><a href="#">Feature</a></li>
+                <li><a href="index.php">Start</a></li>
+                <li><a href="services.php">Services</a></li>
+                <li><a href="features.php">Features</a></li>
+                <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="blog.php" target="_blank">Blog</a></li>
               </ul>
               <form action="blog.php" class="navbar-form navbar-right">
                   <div class="form-group">
@@ -63,19 +62,32 @@
                 <span class="glyphicon glyphicon-tags"></span>
                 &nbsp;Kategorien</a>
             </li>
-            <li><a href="#">
+            <li><a href="admins.php">
             <span class="glyphicon glyphicon-user"></span>
                 &nbsp;Manage Admins</a>
             </li>
             <li class="active"><a href="comments.php">
             <span class="glyphicon glyphicon-comment"></span>
-                &nbsp;Kommentare</a>
+                &nbsp;Kommentare
+                <?php
+                $connection;
+                $queryDeny = "SELECT COUNT(*) FROM comments WHERE status='OFF'";
+                $executeDeny = mysqli_query($connection, $queryDeny);
+                $rowsDeny = mysqli_fetch_array($executeDeny);
+                $totalDeny = array_shift($rowsDeny);
+                if($totalDeny > 0){
+                ?>
+                    <div class="label label-danger"><?php echo $totalDeny; ?></div>
+                <?php    
+                }
+                ?>
+                </a>
             </li>
-            <li><a href="#">
+            <li><a href="blog.php" target=_blank>
             <span class="glyphicon glyphicon-equalizer"></span>
                 &nbsp;Live Blog</a>
             </li>
-            <li><a href="#">
+            <li><a href="logout.php">
             <span class="glyphicon glyphicon-log-out"></span>
                 &nbsp;Logout</a>
             </li>
@@ -88,7 +100,7 @@
               echo okMessage();
           ?>
       </div>
-      <h1>Nicht freigeschaltete Kommentare</h1>
+      <h2 class="text-danger">Nicht freigeschaltete Kommentare</h2>
       <div class="table-responsive">
         <table class="table table-striped table-hover">
             <tr>
@@ -112,7 +124,7 @@ while($dataRows = mysqli_fetch_array($execute)){
     $comment = $dataRows["comment"];
     $postId = $dataRows["admin_panel_id"];
     $srNo++;
-    if(strlen($comment) > 40){$comment = substr($comment, 0, 40)."...";}
+    //if(strlen($comment) > 40){$comment = substr($comment, 0, 40)."...";}
     if(strlen($name) > 10){$name = substr($name, 0, 10)."...";}
 ?>
             <tr>
@@ -121,7 +133,7 @@ while($dataRows = mysqli_fetch_array($execute)){
                 <td><?php echo htmlentities($datetime); ?></td>
                 <td><?php echo htmlentities($comment); ?></td>
                 <td><a class="btn-sm btn-success" href="approve.php?id=<?php echo $id; ?>">Freischalten</a></td>
-                <td><a class="btn-sm btn-danger" href="deleteComment.php?id=<?php echo $id; ?>">Löschen</a></td>
+                <td><a class="btn-sm btn-danger" href="deleteComment.php?id=<?php echo $id; ?>" onclick="return confirm('Really delete?');">Löschen</a></td>
                 <td><a class="btn-sm btn-primary" href="fullPost.php?id=<?php echo $postId; ?>" target=_blank>Vorschau</a></td>
             </tr>
 <?php
@@ -130,7 +142,7 @@ while($dataRows = mysqli_fetch_array($execute)){
         </table>
       </div>
 
-      <h1>Freigeschaltete Kommentare</h1>
+      <h2 class="text-success">Freigeschaltete Kommentare</h2>
       <div class="table-responsive">
         <table class="table table-striped table-hover">
             <tr>

@@ -5,35 +5,35 @@
 <?php
 
 if(isset($_POST["Submit"])){
-    $title = mysqli_real_escape_string($connection, $_POST["Title"]);
-    $category = mysqli_real_escape_string($connection, $_POST["Category"]);
-    $post = mysqli_real_escape_string($connection, $_POST["Post"]);
+    $name = mysqli_real_escape_string($connection, $_POST["Username"]);
+    $password = mysqli_real_escape_string($connection, $_POST["Password"]);
+    $confirm = mysqli_real_escape_string($connection, $_POST["ConfirmPassword"]);
     date_default_timezone_set("Europe/Berlin");
     $currentTime = time();
     $datetime = strftime("%d.%m.%y, %H:%M:%S", $currentTime);
     $datetime;
-    $admin = "Christian Scheidler";
-    $image = $_FILES["Image"]["name"];
-    $uploadPath = "upload/".basename($_FILES["Image"]["name"]);
 
-    if(empty($title)){
-        $_SESSION["ErrorMessage"] = "Bitte geben Sie einen Titel an.";
-        redirect_to("addPost.php");
-    } elseif (strlen($title) < 3) {
-        $_SESSION["ErrorMessage"] = "Der Titel benötigt mindestens 3 Zeichen.";
-        redirect_to("addPost.php");
+    $admin = "Christian Scheidler";
+    if(empty($name)){
+        $_SESSION["ErrorMessage"] = "Bitte geben Sie einen Namen an.";
+        redirect_to("admins.php");
+    } elseif (strlen($password) < 6) {
+        $_SESSION["ErrorMessage"] = "Passwort muss mindestens 6 Zeichen enthalten.";
+        redirect_to("admins.php");
+    } elseif ($password !== $confirm) {
+        $_SESSION["ErrorMessage"] = "Passwörter stimmen nicht überein.";
+        redirect_to("admins.php");
     } else {
         global $connection;
-        $query = "INSERT INTO admin_panel (datetime, title, category, author, image, post)
-            VALUES ('$datetime', '$title', '$category', '$admin', '$image', '$post')";
+        $query = "INSERT INTO registration (datetime, name, added_by, password)
+            VALUES ('$datetime', '$name', '$admin', '$password')";
         $execute = mysqli_query($connection, $query);
-        move_uploaded_file($_FILES["Image"]["tmp_name"], $uploadPath);
         if($execute){
-            $_SESSION["SuccessMessage"] = "Artikel hinzugefügt.";
-            redirect_to("dashboard.php");
+            $_SESSION["SuccessMessage"] = "Admin hinzugefügt.";
+            redirect_to("admins.php");
         } else {
-            $_SESSION["ErrorMessage"] = "Artikel konnte nicht hinzugefügt werden.";
-            redirect_to("addPost.php");
+            $_SESSION["ErrorMessage"] = "Admin konnte nicht hinzugefügt werden.";
+            redirect_to("admins.php");
         }
     }
 }
@@ -46,13 +46,14 @@ if(isset($_POST["Submit"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Artikel verfassen</title>
+    <title>Admins verwalten</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/dashboardStyle.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
 </head>
 <body>
+
   <div class="cont1"></div>
   <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0px;">
       <div class="container">
@@ -93,7 +94,7 @@ if(isset($_POST["Submit"])){
                 <span class="glyphicon glyphicon-th"></span>
                 &nbsp;Dashboard</a>
             </li>
-            <li  class="active"><a href="addPost.php">
+            <li><a href="addPost.php">
                 <span class="glyphicon glyphicon-list-alt"></span>
                 &nbsp;Neuer Artikel</a>
             </li>
@@ -101,7 +102,7 @@ if(isset($_POST["Submit"])){
                 <span class="glyphicon glyphicon-tags"></span>
                 &nbsp;Kategorien</a>
             </li>
-            <li><a href="admins.php">
+            <li  class="active"><a href="admins.php">
                 <span class="glyphicon glyphicon-user"></span>
                 &nbsp;Manage Admins</a>
             </li>
@@ -133,51 +134,72 @@ if(isset($_POST["Submit"])){
         </ul>
     </div> <!-- Sidebar End  -->
     <div class="col-sm-10">
-        <h2>Artikel hinzufügen</h2>
+        <h2>Admins verwalten</h2>
         <div>
             <?php
-            echo message();
-            echo okMessage();
+                echo message();
+                echo okMessage();
             ?>
         </div>
         <div>
-            <form action="addPost.php" method="post" enctype="multipart/form-data">
+            <form action="admins.php" method="post">
                 <fieldset>
                     <div class="form-group">
-                        <label for="title"><span class="fieldInfo">Titel:</span></label>
-                        <input class="form-control" type="text" name="Title" id="title" placeholder="Titel">
+                        <label for="Username"><span class="fieldInfo">Name:</span></label>
+                        <input class="form-control" type="text" name="Username" id="Username">
                     </div>
                     <div class="form-group">
-                        <label for="categorySelect"><span class="fieldInfo">Kategorie:</span></label>
-                        <select class="form-control" id="categorySelect" name="Category">
-                            <?php
-                            global $connection;
-                            $viewquery = "SELECT * FROM category ORDER BY datetime desc";
-                            $execute = mysqli_query($connection, $viewquery);
-
-                            while($dataRows = mysqli_fetch_array($execute)){
-                                $id = $dataRows["id"];
-                                $name = $dataRows["name"];
-                            ?>
-                                <option><?php echo $name ?></option>
-                            <?php
-                            }
-                            ?>
-                        </select>
+                        <label for="Password"><span class="fieldInfo">Password:</span></label>
+                        <input class="form-control" type="password" name="Password" id="Password">
                     </div>
                     <div class="form-group">
-                        <label for="imageSelect"><span class="fieldInfo">Bild:</span></label>
-                        <input type="File" class="form-control" name="Image" id="imageSelect">
+                        <label for="ConfirmPassword"><span class="fieldInfo">Password Bestätigen:</span></label>
+                        <input class="form-control" type="password" name="ConfirmPassword" id="ConfirmPassword">
                     </div>
-                    <div class="form-group">
-                        <label for="postArea"><span class="fieldInfo">Artikel:</span></label>
-                        <textarea class="form-control" name="Post" id="postArea" rows="6" cols="50"></textarea>
-                    </div>
-                    <br>
-                    <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Artikel hinzufügen">
+                    <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Admins hinzufügen">
                     <br>
                 </fieldset>
             </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th>No.</th>
+                    <th>Datum/ Zeit</th>
+                    <th>Admin Name</th>
+                    <th>Hinzugefügt von</th>
+                    <th>ID</th>
+                    <th></th>
+                </tr>
+                <?php
+                    global $connection;
+                    $viewquery = "SELECT * FROM registration ORDER BY datetime desc";
+                    $execute = mysqli_query($connection, $viewquery);
+
+                    $idNo = 0;
+
+                    while($dataRows = mysqli_fetch_array($execute)){
+                        $id = $dataRows["id"];
+                        $datetime = $dataRows["datetime"];
+                        $name = $dataRows["name"];
+                        $creator = $dataRows["added_by"];
+                        $idNo ++;
+                ?>
+
+                <tr>
+                    <td> <?php echo $idNo; ?> </td>
+                    <td> <?php echo $datetime; ?> </td>
+                    <td> <?php echo $name; ?> </td>
+                    <td> <?php echo $creator; ?> </td>
+                    <td> <?php echo $id; ?></td>
+                    <td><a class="btn-sm btn-danger" href="deleteAdmin.php?id=<?php echo $id; ?>" onclick="return confirm('Really delete?');">Delete</a></td>
+
+                </tr>
+
+                <?php  }; ?>    <!-- end of while loop -->
+
+            </table>
         </div>
 
     </div> <!-- Main End  -->

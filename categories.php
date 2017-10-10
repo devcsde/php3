@@ -59,16 +59,15 @@ if(isset($_POST["Submit"])){
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
               </button>
-              <h2><a href="blog.php"><span class="mySpan">dev</span>cs</a></h2>
+              <h2 class="logo"><a href="index.php"><span class="mySpan">dev</span>cs</a></h2>
           </div>
           <div class="collapse navbar-collapse" id="collapse">
               <ul class="nav navbar-nav">
-                  <li><a href="index.php">Home</a></li>
-                  <li><a href="blog.php" target="_blank">Blog</a></li>
-                  <li><a href="#">Über mich</a></li>
-                  <li><a href="#">Services</a></li>
-                  <li><a href="#">Kontakt</a></li>
-                  <li><a href="#">Feature</a></li>
+                <li><a href="index.php">Start</a></li>
+                <li><a href="services.php">Services</a></li>
+                <li><a href="features.php">Features</a></li>
+                <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="blog.php" target="_blank">Blog</a></li>
               </ul>
               <form action="blog.php" class="navbar-form navbar-right">
                   <div class="form-group">
@@ -98,26 +97,39 @@ if(isset($_POST["Submit"])){
                 <span class="glyphicon glyphicon-tags"></span>
                 &nbsp;Kategorien</a>
             </li>
-            <li><a href="#">
+            <li><a href="admins.php">
                 <span class="glyphicon glyphicon-user"></span>
                 &nbsp;Manage Admins</a>
             </li>
             <li><a href="comments.php">
                 <span class="glyphicon glyphicon-comment"></span>
-                &nbsp;Kommentare</a>
+                &nbsp;Kommentare
+                <?php
+                $connection;
+                $queryDeny = "SELECT COUNT(*) FROM comments WHERE status='OFF'";
+                $executeDeny = mysqli_query($connection, $queryDeny);
+                $rowsDeny = mysqli_fetch_array($executeDeny);
+                $totalDeny = array_shift($rowsDeny);
+                if($totalDeny > 0){
+                ?>
+                    <div class="label label-danger"><?php echo $totalDeny; ?></div>
+                <?php    
+                }
+                ?>
+                </a>
             </li>
-            <li><a href="#">
+            <li><a href="blog.php" target=_blank>
                 <span class="glyphicon glyphicon-equalizer"></span>
                 &nbsp;Live Blog</a>
             </li>
-            <li><a href="#">
+            <li><a href="logout.php">
                 <span class="glyphicon glyphicon-log-out"></span>
                 &nbsp;Logout</a>
             </li>
         </ul>
     </div> <!-- Sidebar End  -->
     <div class="col-sm-10">
-        <h1>Kategorien verwalten</h1>
+        <h2>Kategorien verwalten</h2>
         <div>
             <?php
                 echo message();
@@ -145,6 +157,7 @@ if(isset($_POST["Submit"])){
                     <th>Kategorie Name</th>
                     <th>Author</th>
                     <th>ID</th>
+                    <th></th>
                 </tr>
                 <?php
                     global $connection;
@@ -167,6 +180,7 @@ if(isset($_POST["Submit"])){
                     <td> <?php echo $name; ?> </td>
                     <td> <?php echo $creator; ?> </td>
                     <td> <?php echo $id; ?></td>
+                    <td><a class="btn-sm btn-danger" href="deleteCategory.php?id=<?php echo $id; ?>" onclick="return confirm('Really delete?');">Delete</a></td>
 
                 </tr>
 

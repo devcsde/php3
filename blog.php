@@ -26,16 +26,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <h2><a href="blog.php"><span class="mySpan">dev</span>cs</a></h2>
+            <h2  class="logo"><a href="index.php"><span class="mySpan">dev</span>cs</a></h2>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
             <ul class="nav navbar-nav">
-                <li><a href="index.php">Home</a></li>
+                <li><a href="index.php">Start</a></li>
+                <li><a href="services.php">Services</a></li>
+                <li><a href="features.php">Features</a></li>
+                <li><a href="contact.php">Kontakt</a></li>
                 <li class="active"><a href="blog.php">Blog</a></li>
-                <li><a href="#">Über mich</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Kontakt</a></li>
-                <li><a href="#">Feature</a></li>
             </ul>
             <form action="blog.php" class="navbar-form navbar-right">
                 <div class="form-group">
