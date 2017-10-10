@@ -1,7 +1,7 @@
 <?php require_once("include/sessions.php"); ?>
 <?php require_once("include/helpers.php"); ?>
 <?php require_once("include/db.php"); ?>
-
+<?php confirm_login(); ?>
 <?php 
 if(isset($_GET["id"])){
     $id = $_GET["id"];

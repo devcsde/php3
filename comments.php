@@ -1,6 +1,7 @@
 <?php require_once("include/db.php"); ?>
 <?php require_once("include/sessions.php"); ?>
 <?php require_once("include/helpers.php"); ?>
+<?php confirm_login(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
