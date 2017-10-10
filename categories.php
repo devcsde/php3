@@ -11,7 +11,7 @@ if(isset($_POST["Submit"])){
     $datetime = strftime("%d.%m.%y, %H:%M:%S", $currentTime);
     $datetime;
 
-    $admin = "Christian Scheidler";
+    $admin = $_SESSION["user_name"];
     if(empty($category)){
         $_SESSION["ErrorMessage"] = "Bitte fuellen Sie alle Felder aus.";
         redirect_to("categories.php");

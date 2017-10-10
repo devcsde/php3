@@ -158,7 +158,6 @@ while($dataRows = mysqli_fetch_array($execute)){
             </tr>
 <?php
 global $connection;
-$admin = "Chris";
 $query = "SELECT * FROM comments WHERE status='ON' ORDER BY datetime desc";
 $execute = mysqli_query($connection, $query);
 $srNo = 0;
@@ -168,6 +167,7 @@ while($dataRows = mysqli_fetch_array($execute)){
     $name = $dataRows["name"];
     $comment = $dataRows["comment"];
     $postId = $dataRows["admin_panel_id"];
+    $admin = $dataRows["approved_by"];
     $srNo++;
     if(strlen($comment) > 40){$comment = substr($comment, 0, 40)."...";}
     if(strlen($name) > 10){$name = substr($name, 0, 10)."...";}
@@ -177,7 +177,7 @@ while($dataRows = mysqli_fetch_array($execute)){
                 <td class="dashColor"><?php echo htmlentities($name); ?></td>
                 <td><?php echo htmlentities($datetime); ?></td>
                 <td><?php echo htmlentities($comment); ?></td>
-                <td><?php echo $admin; ?></td>
+                <td><?php echo htmlentities($admin); ?></td>
                 <td><a class="btn-sm btn-warning" href="deny.php?id=<?php echo $id; ?>">Sperren</a></td>
                 <td><a class="btn-sm btn-danger" href="deleteComment.php?id=<?php echo $id; ?>">Löschen</a></td>
                 <td><a class="btn-sm btn-primary" href="fullPost.php?id=<?php echo $postId; ?>" target=_blank>Vorschau</a></td>

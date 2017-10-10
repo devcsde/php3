@@ -12,7 +12,7 @@ if(isset($_POST["Submit"])){
     $currentTime = time();
     $datetime = strftime("%d.%m.%y, %H:%M:%S", $currentTime);
     $datetime;
-    $admin = "Christian Scheidler";
+    $admin = $_SESSION["user_name"];
     $image = $_FILES["Image"]["name"];
     $uploadPath = "upload/".basename($_FILES["Image"]["name"]);
 

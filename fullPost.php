@@ -18,8 +18,8 @@ if(isset($_POST["Submit"])){
         $_SESSION["ErrorMessage"] = "Nur 500 Zeichen per Kommentar.";
     } else {
         global $connection;
-        $query = "INSERT into comments (datetime, name, email, comment, status, admin_panel_id)
-            VALUES ('$datetime', '$name', '$email', '$comment', 'OFF', '$postId')";
+        $query = "INSERT into comments (datetime, name, email, comment, status, admin_panel_id, approved_by)
+            VALUES ('$datetime', '$name', '$email', '$comment', 'OFF', '$postId', 'pending..')";
         $execute = mysqli_query($connection, $query);
        
         if($execute){

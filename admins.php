@@ -2,8 +2,8 @@
 <?php require_once("include/sessions.php"); ?>
 <?php require_once("include/helpers.php"); ?>
 <?php confirm_login(); ?>
-<?php
 
+<?php
 if(isset($_POST["Submit"])){
     $name = mysqli_real_escape_string($connection, $_POST["Username"]);
     $password = mysqli_real_escape_string($connection, $_POST["Password"]);
@@ -13,7 +13,7 @@ if(isset($_POST["Submit"])){
     $datetime = strftime("%d.%m.%y, %H:%M:%S", $currentTime);
     $datetime;
 
-    $admin = "Christian Scheidler";
+    $admin = $_SESSION["user_name"];
     if(empty($name)){
         $_SESSION["ErrorMessage"] = "Bitte geben Sie einen Namen an.";
         redirect_to("admins.php");
@@ -37,7 +37,6 @@ if(isset($_POST["Submit"])){
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>

@@ -5,8 +5,9 @@
 <?php 
 if(isset($_GET["id"])){
     $id = $_GET["id"];
+    $admin=$_SESSION["user_name"];
     $connection;
-    $query = "UPDATE comments SET status = 'ON' WHERE id='$id'";
+    $query = "UPDATE comments SET status = 'ON', approved_by='$admin' WHERE id='$id'";
     $execute = mysqli_query($connection, $query);
     if($execute){
         $_SESSION["SuccessMessage"] = "Kommentar freigeschaltet.";
