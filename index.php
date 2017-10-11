@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>devcs start</title>
+    <title>blog</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/public.css">
     <script src="./js/jquery.min.js"></script>
@@ -65,8 +65,19 @@
                 $search = $_GET["Search"];
                 $query = "SELECT * FROM admin_panel WHERE datetime LIKE '%$search%' OR
                            title LIKE '%$search%' OR category LIKE '%$search%' OR post LIKE '%$search%'";
+            // this query will run when pagination if active
+            } elseif(isset($_GET["page"])){
+                $page = $_GET["page"];
+                if($page <= 0){
+                    $showPostFrom = 0;
+                } else {
+                    $showPostFrom = ($page*5) - 5;
+                }
+                $query = "SELECT * FROM admin_panel ORDER BY datetime desc LIMIT $showPostFrom, 5";
+            // this query will run when no pagination is active
             } else {
-                $query = "SELECT * FROM admin_panel ORDER BY datetime desc";
+                $query = "SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,1";
+                //$page = 1;
             }
             $execute = mysqli_query($connection, $query);
 
@@ -86,18 +97,19 @@
                     <p class="description">Kategorie: <?php echo htmlentities($category); ?>, veröffentlicht: <?php echo htmlentities($datetime); ?></p>
                     <p class="post"><?php 
                         if(strlen($post) > 250){$post=substr($post, 0, 250)."...";}
-                        echo htmlentities($post); ?>
+                        echo nl2br($post); ?>
                     </p>
                 </div>
                 <a class="btn btn-info" href="fullPost.php?id=<?php echo $postId; ?>">weiter lesen &rsaquo;&rsaquo;</a>
             </div>
     <?php   } ?>
+
+            
         </div>
         <div class="col-sm-offset-1 col-sm-3">
             <h3><span class="mySpan">dev</span>elopment<br>
             <span class="mySpan2">c</span>oncept<br> 
             <span class="mySpan2">s</span>tyle</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate excepturi earum aspernatur corporis eaque soluta dolores minus ut, veritatis magnam velit nam nihil nisi placeat quaerat eos quas debitis vitae eum corrupti ad. Nobis nisi optio possimus fugiat autem esse animi magni similique, dolore illo voluptate error at culpa non!</p>
         </div>
     </div>
 </div>

@@ -194,8 +194,8 @@ if(isset($_POST["Submit"])){
                             <input type="File" class="form-control" name="Image" id="imageSelect" value="<?php echo $image; ?>" >
                         </div>
                         <div class="form-group">
-                            <label for="postArea"><span class="fieldInfo">Artikel:</span></label>
-                            <textarea class="form-control" name="Post" id="postArea" rows="6" cols="50"><?php echo $post; ?></textarea>
+                            <label for="area1"><span class="fieldInfo">Artikel:</span></label>
+                            <textarea class="form-control" name="Post" id="area1" rows="6" cols="50"><?php echo $post; ?></textarea>
                         </div>
                         <br>
                         <input class="btn btn-info btn-block" type="Submit" name="Submit" value="Artikel editieren">

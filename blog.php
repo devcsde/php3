@@ -65,8 +65,19 @@
                 $search = $_GET["Search"];
                 $query = "SELECT * FROM admin_panel WHERE datetime LIKE '%$search%' OR
                            title LIKE '%$search%' OR category LIKE '%$search%' OR post LIKE '%$search%'";
+            // this query will run when pagination if active
+            } elseif(isset($_GET["page"])){
+                $page = $_GET["page"];
+                if($page <= 0){
+                    $showPostFrom = 0;
+                } else {
+                    $showPostFrom = ($page*5) - 5;
+                }
+                $query = "SELECT * FROM admin_panel ORDER BY datetime desc LIMIT $showPostFrom, 5";
+            // this query will run when no pagination is active
             } else {
-                $query = "SELECT * FROM admin_panel ORDER BY datetime desc";
+                $query = "SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";
+                $page = 1;
             }
             $execute = mysqli_query($connection, $query);
 
@@ -86,18 +97,55 @@
                     <p class="description">Kategorie: <?php echo htmlentities($category); ?>, veröffentlicht: <?php echo htmlentities($datetime); ?></p>
                     <p class="post"><?php 
                         if(strlen($post) > 250){$post=substr($post, 0, 250)."...";}
-                        echo htmlentities($post); ?>
+                        echo nl2br($post); ?>
                     </p>
                 </div>
                 <a class="btn btn-info" href="fullPost.php?id=<?php echo $postId; ?>">weiter lesen &rsaquo;&rsaquo;</a>
             </div>
     <?php   } ?>
+
+            <nav>
+                <ul class="pagination pagination-lg">
+                <?php
+                if($page > 1){
+                ?>
+                    <li><a href="blog.php?page=<?php echo $page-1 ?>">&laquo;</a></li>
+                <?php    
+                }
+                ?>
+            <?php
+            global $connection;
+            $sql = "SELECT COUNT(*) FROM admin_panel";
+            $execute = mysqli_query($connection, $sql);
+            $rawPagination = mysqli_fetch_array($execute);
+            $totalPosts = array_shift($rawPagination);
+            $pages = ceil($totalPosts/5);
+            
+            for($i=1; $i <= $pages; $i++){
+                if($i==$page){
+            ?>        
+                    <li class="active"><a href="blog.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php        
+                } else {
+            ?>
+                    <li><a href="blog.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+            <?php
+            }}
+            ?>
+                <?php
+                if($page+1 <= $pages){
+                ?>
+                    <li><a href="blog.php?page=<?php echo $page+1 ?>">&raquo;</a></li>
+                <?php    
+                }
+                ?>
+                </ul>
+            </nav>
         </div>
         <div class="col-sm-offset-1 col-sm-3">
             <h3><span class="mySpan">dev</span>elopment<br>
             <span class="mySpan2">c</span>oncept<br> 
             <span class="mySpan2">s</span>tyle</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate excepturi earum aspernatur corporis eaque soluta dolores minus ut, veritatis magnam velit nam nihil nisi placeat quaerat eos quas debitis vitae eum corrupti ad. Nobis nisi optio possimus fugiat autem esse animi magni similique, dolore illo voluptate error at culpa non!</p>
         </div>
     </div>
 </div>

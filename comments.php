@@ -111,7 +111,6 @@
                 <th>Kommentare</th>
                 <th>Freischalten</th>
                 <th>Löschen</th>
-                <th>Vorschau</th>
             </tr>
 <?php
 global $connection;
@@ -135,7 +134,6 @@ while($dataRows = mysqli_fetch_array($execute)){
                 <td><?php echo htmlentities($comment); ?></td>
                 <td><a class="btn-sm btn-success" href="approve.php?id=<?php echo $id; ?>">Freischalten</a></td>
                 <td><a class="btn-sm btn-danger" href="deleteComment.php?id=<?php echo $id; ?>" onclick="return confirm('Really delete?');">Löschen</a></td>
-                <td><a class="btn-sm btn-primary" href="fullPost.php?id=<?php echo $postId; ?>" target=_blank>Vorschau</a></td>
             </tr>
 <?php
 }

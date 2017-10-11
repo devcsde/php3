@@ -16,6 +16,8 @@ if(isset($_POST["Submit"])){
         $_SESSION["ErrorMessage"] = "Bitte füllen Sie alle Felder aus.";
     } elseif (strlen($comment) > 500) {
         $_SESSION["ErrorMessage"] = "Nur 500 Zeichen per Kommentar.";
+    } elseif(strpos($comment, "<script>") !== false){
+        $_SESSION["ErrorMessage"] = "<script> tags sind nicht erlaubt.";
     } else {
         global $connection;
         $query = "INSERT into comments (datetime, name, email, comment, status, admin_panel_id, approved_by)
@@ -121,7 +123,7 @@ if(isset($_POST["Submit"])){
                 <div class="caption">
                     <h3 id="header"><?php echo htmlentities($title); ?></h3>
                     <p class="description">Kategorie: <?php echo htmlentities($category); ?>, veröffentlicht: <?php echo htmlentities($datetime); ?></p>
-                    <p class="post"><?php echo htmlentities($post); ?> </p>
+                    <p class="post"><?php echo nl2br($post); ?> </p>
                 </div>
             </div>
             <?php 
@@ -140,7 +142,7 @@ if(isset($_POST["Submit"])){
             ?>
             <div class="row commentBlock thumbnail">
                 <div class="col-sm-9">
-                    <p><?php echo $comment; ?></p>
+                    <p><?php echo nl2br($comment); ?></p>
                 </div>
                 <div class="col-sm-3">
                     <p class="comments"><?php echo $commentName; ?></p>
@@ -162,8 +164,8 @@ if(isset($_POST["Submit"])){
                         <input class="form-control" type="email" name="Email" id="email">
                     </div>
                     <div class="form-group">
-                        <label for="commentArea"><span class="mySpan2">Kommentar:</span></label>
-                        <textarea class="form-control" name="Comment" id="commentArea"></textarea>
+                        <label for="area1"><span class="mySpan2">Kommentar:</span></label>
+                        <textarea class="form-control" name="Comment" id="area1"></textarea>
                     </div>
                     <input class="btn btn-primary" type="Submit" name="Submit" value="Kommentar hinzufügen">
                 </fieldset>
