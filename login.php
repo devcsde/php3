@@ -6,6 +6,7 @@
 if(isset($_POST["Submit"])){
     $name = mysqli_real_escape_string($connection, $_POST["Username"]);
     $password = mysqli_real_escape_string($connection, $_POST["Password"]);
+    $password = hash("sha512", $password, $raw_output=false);
 
     if(empty($name) || empty($password)){
         $_SESSION["ErrorMessage"] = "Bitte füllen Sie alle Felder aus.";
@@ -37,7 +38,7 @@ if(isset($_POST["Submit"])){
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
 </head>
-<body>
+<body class="bg">
 
 <div class="cont1"></div>
 <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0px;">

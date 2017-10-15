@@ -1,4 +1,4 @@
-<?php require_once("include/db.php"); ?>
+﻿<?php require_once("include/db.php"); ?>
 <?php require_once("include/sessions.php"); ?>
 <?php require_once("include/helpers.php"); ?>
 <?php
@@ -47,8 +47,7 @@ if(isset($_POST["Submit"])){
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/main.js"></script>
 </head>
-<body>
-<div class="cont1"></div>
+<body class="bg">
 <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0px;">
     <div class="container">
         <div class="navbar-header myNav">
@@ -63,9 +62,8 @@ if(isset($_POST["Submit"])){
         <div class="collapse navbar-collapse" id="collapse">
             <ul class="nav navbar-nav">
                 <li><a href="index.php">Start</a></li>
-                <li><a href="services.php">Services</a></li>
-                <li><a href="features.php">Features</a></li>
                 <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="features.php">Projekte</a></li>
                 <li class="active"><a href="blog.php">Blog</a></li>
             </ul>
             <form action="blog.php" class="navbar-form navbar-right">
@@ -77,17 +75,7 @@ if(isset($_POST["Submit"])){
         </div>
     </div>
 </nav>
-<div class="cont2"></div>
-
 <div class="container">
-    <div class="blog-header">
-        &nbsp;
-        <p class="lead"><span
-                        class="txt-rotate"
-                        data-period="2000"
-                        data-rotate='[ "web development ++ php ++ javascript ++ nodejs ++ jquery ++ html5 ++ css" ]'></span>
-        </p>
-    </div>
     <div class="row">
         <div class="col-sm-8">
             <div>
@@ -98,14 +86,14 @@ if(isset($_POST["Submit"])){
             </div>
             <?php
             global $connection;
-
+            // when search, do this
             if(isset($_GET["SearchButton"])){
                 $search = $_GET["Search"];
                 $query = "SELECT * FROM admin_panel WHERE datetime LIKE '%$search%' OR
                            title LIKE '%$search%' OR category LIKE '%$search%' OR post LIKE '%$search%'";
             } else {
                 $urlPostId = $_GET["id"];
-                $query = "SELECT * FROM admin_panel WHERE id = '$urlPostId' ORDER BY datetime desc";
+                $query = "SELECT * FROM admin_panel WHERE id = '$urlPostId' ORDER BY id desc";
             }
             $execute = mysqli_query($connection, $query);
 
@@ -117,6 +105,7 @@ if(isset($_POST["Submit"])){
                 $author = $dataRows["author"]; 
                 $image = $dataRows["image"]; 
                 $post = $dataRows["post"]; 
+                if(empty($image)){$image = "noimg.png";} 
             ?>
             <div class="blogpost thumbnail">
                 <img class="img-responsive img-rounded" src="upload/<?php echo $image; ?>">
@@ -129,6 +118,7 @@ if(isset($_POST["Submit"])){
             <?php 
             } 
             ?>
+            <br><br>
             <h4 class="mySpan2"><strong>Kommentare:</strong></h4>
             <div class="container col-sm-12">
             <?php  
@@ -167,22 +157,68 @@ if(isset($_POST["Submit"])){
                         <label for="area1"><span class="mySpan2">Kommentar:</span></label>
                         <textarea class="form-control" name="Comment" id="area1"></textarea>
                     </div>
-                    <input class="btn btn-primary" type="Submit" name="Submit" value="Kommentar hinzufügen">
+                    <input class="btn btn-default" type="Submit" name="Submit" value="Kommentar hinzufügen">
                 </fieldset>
             </form>
             </div>
+            &nbsp;
         </div>
         <div class="col-sm-offset-1 col-sm-3">
-            <h3><span class="mySpan">dev</span>elopment<br>
-            <span class="mySpan2">c</span>oncept<br> 
-            <span class="mySpan2">s</span>tyle</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate excepturi earum aspernatur corporis eaque soluta dolores minus ut, veritatis magnam velit nam nihil nisi placeat quaerat eos quas debitis vitae eum corrupti ad. Nobis nisi optio possimus fugiat autem esse animi magni similique, dolore illo voluptate error at culpa non!</p>
+            <div class="panel panel-default sidebar">
+                <h4 class=""><strong>Letzte Artikel</strong></h4>
+                <div class="panel-body">
+                    <?php 
+                    global $connection;
+                    $sql = "SELECT * FROM admin_panel ORDER BY id desc LIMIT 3";
+                    $execute = mysqli_query($connection, $sql);
+                    while($dataRows = mysqli_fetch_array($execute)){
+                        $id = $dataRows["id"];
+                        $title = $dataRows["title"];
+                        $datetime = $dataRows["datetime"];
+                        $image = $dataRows["image"];
+                        if(strlen($datetime) > 8){$datetime = substr($datetime, 0,8);}
+                        if(empty($image)){$image = "noimg.png";}
+                    ?>
+                    <hr>
+                    <div class="margin1">
+                        <img class="pull-left" style="margin: 0 0 0 5px;" src="upload/<?php echo htmlentities($image); ?>" width=75 height=60>
+                        <a href="fullPost.php?id=<?php echo $id; ?>"><p style="margin-left: 90px"><strong class="mysidebar2"><?php echo htmlentities($title); ?></strong></p></a>
+                        <p class="description" style="margin-left: 90px"><?php echo htmlentities($datetime) ?></p>
+                    </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="panel panel-default sidebar">
+                <h4><strong>Kategorien</strong></h4>
+                <div class="panel-body">
+                    <hr>
+                    <?php 
+                    global $connection;
+                    $sql = "SELECT * FROM category ORDER BY name asc";
+                    $execute = mysqli_query($connection, $sql);
+                    while($dataRows = mysqli_fetch_array($execute)){
+                        $id = $dataRows["id"];
+                        $category = $dataRows["name"];
+                    ?>
+                    <a href="blog.php?cat=<?php echo $category; ?>"><span  class="myheader"><?php echo $category."<br>"; ?></span></a>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </div>
+            <div class="thumbnail sidebar">
+                <h3><span class="mySpan">dev</span>elopment<br>
+                <span class="mySpan2">c</span>oncept<br> 
+                <span class="mySpan2">s</span>tyle</h3>
+                <hr>
+                    <strong>
+                    “If debugging is the process of removing software bugs, then programming must be the process of putting them in.”
+                    </strong>
+            </div>
         </div>
     </div>
 </div>
-<div id="footer">
-    <p>&copy;2017 Christian Scheider [chris@devcs.de] --- All rights reserved.</p>
-</div>
-<div class="cont1"></div>
 </body>
 </html>

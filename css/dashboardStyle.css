@@ -21,11 +21,6 @@ body {
     font-weight: bold;
 }
 
-#myspacer {
-    height:10px;
-    background: #27AAE1;
-}
-
 #sidemenu a{
     color:#9fb1c2;
 }
@@ -84,14 +79,8 @@ body {
     color: #F08827;
 }
 
-.cont1 {
-    height: 10px;
-    background: #27aae1;
-}
-
 .cont2 {
-    height: 10px;
-    background: #27aae1;
+    
     margin-top: -20px;
 }
 

@@ -1,6 +1,33 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    background: black;
+}
+body a:hover {
+    text-decoration: none !important;
+  }
+
+hr {
+    color: #000;
+}
+
+.bg {
+    /* The image used */
+    background-image: url("../images/bg.jpg");
+    background-color: #fff;
+    /* Full height */
+    height: auto;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 #footer {
-    padding: 10px;
-    border-top: 1px solid black;
+    padding: 15px;
+    height: 50px;
     color: #eeeeee;
     background-color: #211F22;
     text-align: center;
@@ -18,15 +45,27 @@
 }
 
 .blogpost {
-    background-color: #f5f5f5;
+    background-color: rgba(248, 248, 248, 0.55);
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 10px;
     overflow: hidden;
 }
 
-.btn-info {
+.btn-dark {
     float: right;
+    color: #fff;
+    background-color: #211F22;
+    border: 1;
+    border-color:rgb(97, 97, 97);
+}
+
+.btn-dark:hover {
+    float: right;
+    color: #fff;
+    background-color: rgb(97, 97, 97);
+    border: 1;
+    border-color: #211F22;
 }
 
 .commentBlock {
@@ -38,22 +77,15 @@
     margin: 0 -15px 0 -15px;
 }
 
+.margin1 {
+    margin: -10px 0 0 0;
+}
+
 .comments {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 1.2em;
     font-weight: bold;
     color: #005e90;
-}
-
-.cont1 {
-    height: 10px;
-    background: #27aae1;
-}
-
-.cont2 {
-    height: 10px;
-    background: #27aae1;
-    margin-top: -20px;
 }
 
 .description {
@@ -68,12 +100,20 @@
     font-size: 1.2em;
 }
 
-.logo {
-    padding-right:50px;
+.footer {
+    padding: 15px;
+    color: #eeeeee;
+    background-color: #211F22;
+    text-align: center;
+    font-weight: bold;
+    bottom: -0px;
+    height: 50px;
+    position: absolute;
+    width: 100%;
 }
 
-.myNav {
-    color: #27aae1;
+.logo {
+    padding-right:50px;
 }
 
 .myNav h2 {
@@ -97,6 +137,17 @@
     font-size: 1.2em;
 }
 
+.myheader {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #282929;
+}
+
+.myheader:hover {
+    color: rgb(241, 137, 0);
+}
+
 .mySpan {
     color: #F08827;
 }
@@ -105,8 +156,75 @@
     color: #005e90;
 }
 
+.navbar-inverse .navbar-nav > li > a {
+    color: rgb(219, 215, 211);
+}
+
 .post {
     font-size: 1.1em;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     text-align: justify;
 }
+
+.post1 {
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar {
+    background-color: rgba(248, 248, 248, 0.55);
+    color:rgb(0, 0, 0);
+    padding: 10px;
+    overflow: hidden;
+}
+
+.sidebar h4 {
+    color: #025883;
+    margin:0;
+    margin-bottom: -15px;
+    padding-left: 5px;
+    padding-top: 5px;
+    text-align: center;
+}
+
+.sidebar h3 {
+    margin:0;
+    padding-left: 5px;
+}
+
+.sidebar hr {
+    border: 0;
+    border-top: 2px dotted #8c8c8c;
+}
+
+.mysidebar {
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 5px;
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #025883;
+}
+
+.mysidebar:hover {
+    color: rgb(4, 37, 53);
+}
+
+.mysidebar2 {
+    font-family: Arial, Helvetica, sans-serif;
+    padding-left: 5px;
+    font-size: 1.0em;
+    font-weight: bold;
+    color: #282929;
+}
+
+.mysidebar2:hover {
+    color: rgb(241, 137, 0);
+}
+
+@media (min-width: 768px) {
+    .row-fluid {
+      display: flex;
+      align-items: flex-end;
+    }
+  }
+

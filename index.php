@@ -7,16 +7,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>blog</title>
+    <title>devcs</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/public.css">
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/main.js"></script>
 </head>
-<body>
-
-<div class="cont1"></div>
+<body class="bg">
 <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0px;">
     <div class="container">
         <div class="navbar-header myNav">
@@ -31,9 +29,8 @@
         <div class="collapse navbar-collapse" id="collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="index.php">Start</a></li>
-                <li><a href="services.php">Services</a></li>
-                <li><a href="features.php">Features</a></li>
                 <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="features.php">Projekte</a></li>
                 <li><a href="blog.php">Blog</a></li>
             </ul>
             <form action="blog.php" class="navbar-form navbar-right">
@@ -45,18 +42,9 @@
         </div>
     </div>
 </nav>
-<div class="cont2"></div>
-
+&nbsp;
 <div class="container">
-    <div class="blog-header">
-    &nbsp;
-    <p class="lead"><span
-                    class="txt-rotate"
-                    data-period="2000"
-                    data-rotate='[ "web development ++ php ++ javascript ++ nodejs ++ jquery ++ html5 ++ css" ]'></span>
-    </p>
-    </div>
-    <div class="row">
+    <div class="row row-fluid">
         <div class="col-sm-8">
             <?php
             global $connection;
@@ -76,8 +64,7 @@
                 $query = "SELECT * FROM admin_panel ORDER BY datetime desc LIMIT $showPostFrom, 5";
             // this query will run when no pagination is active
             } else {
-                $query = "SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,1";
-                //$page = 1;
+                $query = "SELECT * FROM admin_panel WHERE id='18' ORDER BY datetime desc LIMIT 0,1";
             }
             $execute = mysqli_query($connection, $query);
 
@@ -91,31 +78,28 @@
                 $post = $dataRows["post"]; 
             ?>
             <div class="blogpost thumbnail">
-                <img class="img-responsive img-rounded" src="upload/<?php echo $image; ?>">
                 <div class="caption">
                     <h3 id="header"><?php echo htmlentities($title); ?></h3>
-                    <p class="description">Kategorie: <?php echo htmlentities($category); ?>, veröffentlicht: <?php echo htmlentities($datetime); ?></p>
-                    <p class="post"><?php 
-                        if(strlen($post) > 250){$post=substr($post, 0, 250)."...";}
-                        echo nl2br($post); ?>
-                    </p>
+                    <p class="post"><?php echo nl2br($post); ?></p>
                 </div>
-                <a class="btn btn-info" href="fullPost.php?id=<?php echo $postId; ?>">weiter lesen &rsaquo;&rsaquo;</a>
+                <img class="img-responsive img-rounded" src="upload/<?php echo $image; ?>">
             </div>
     <?php   } ?>
-
-            
         </div>
-        <div class="col-sm-offset-1 col-sm-3">
-            <h3><span class="mySpan">dev</span>elopment<br>
-            <span class="mySpan2">c</span>oncept<br> 
-            <span class="mySpan2">s</span>tyle</h3>
+        <div class="col-sm-offset-1 col-sm-3  pull-down">
+            <div class="sidebar thumbnail">
+                <h3><span class="mySpan">dev</span>elopment<br>
+                <span class="mySpan2">c</span>oncept<br> 
+                <span class="mySpan2">s</span>tyle</h3>
+                <hr>
+                <span
+                    class="txt-rotate mysidebar"
+                    data-period="2000"
+                    data-rotate='[ "web development", "php", "javascript", "nodejs", "jquery", "html5", "css" ]'>
+                </span>
+            </div>
         </div>
     </div>
 </div>
-<div id="footer">
-    <p>&copy;2017 Christian Scheider [chris@devcs.de] --- All rights reserved.</p>
-</div>
-<div class="cont1"></div>
 </body>
 </html>

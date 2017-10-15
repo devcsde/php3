@@ -15,7 +15,6 @@
     <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-  <div class="cont1"></div>
   <nav class="navbar navbar-inverse" role="navigation" style="border-radius:0px;">
       <div class="container">
           <div class="navbar-header myNav">
@@ -30,9 +29,8 @@
           <div class="collapse navbar-collapse" id="collapse">
               <ul class="nav navbar-nav">
                 <li><a href="index.php">Start</a></li>
-                <li><a href="services.php">Services</a></li>
-                <li><a href="features.php">Features</a></li>
                 <li><a href="contact.php">Kontakt</a></li>
+                <li><a href="features.php">Projekte</a></li>
                 <li><a href="blog.php" target="_blank">Blog</a></li>
               </ul>
               <form action="blog.php" class="navbar-form navbar-right">
@@ -191,6 +189,5 @@ while($dataRows = mysqli_fetch_array($execute)){
 <div id="footer">
     <p>&copy;2017 Christian Scheider [chris@devcs.de] --- All rights reserved.</p>
 </div>
-<div id="myspacer"></div>
 </body>
 </html>
